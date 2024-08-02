@@ -47,23 +47,6 @@ def main():
         
         # Debug: Print TPM
         print("Transition Probability Matrix:\n", tpm)
-        
-        # Convert TPM to DataFrame for display and download
-        if tpm.shape[0] == len(market_names) and tpm.shape[1] == len(market_names):
-            tpm_df = pd.DataFrame(tpm, columns=market_names, index=market_names)
-            st.write("Transition Probability Matrix:")
-            st.write(tpm_df)
-            
-            # Allow user to download TPM
-            tpm_csv = tpm_df.to_csv(index=True).encode('utf-8')
-            st.download_button(
-                label="Download TPM as CSV",
-                data=tpm_csv,
-                file_name='tpm_matrix.csv',
-                mime='text/csv'
-            )
-        else:
-            st.error("Mismatch between TPM dimensions and market names.")
 
 if __name__ == "__main__":
     main()
