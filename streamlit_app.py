@@ -44,9 +44,7 @@ def main():
 
         # Calculate TPM
         tpm,market_names = calculate_tpm(df)
-        
-        # Debug: Print TPM
-        print("Transition Probability Matrix:\n", tpm)
+        print(tpm)
 
 if __name__ == "__main__":
     main()
