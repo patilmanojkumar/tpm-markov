@@ -46,7 +46,7 @@ def main():
         tpm, market_names = calculate_tpm(df)
 
         st.write("Transition Probability Matrix:")
-        tpm_df = pd.DataFrame(tpm, columns=market_names, index=market_names)
+        tpm_df = pd.DataFrame(tpm)
         st.write(tpm_df)
 
         # Option to download the TPM
