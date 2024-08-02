@@ -49,7 +49,7 @@ def main():
         print("Transition Probability Matrix:\n", tpm)
         
         # Convert TPM to DataFrame for display and download
-        tpm_df = pd.DataFrame(tpm, columns=market_names, index=market_names)
+        tpm_df = pd.DataFrame(tpm)
         st.write("Transition Probability Matrix:")
         st.write(tpm_df)
 
