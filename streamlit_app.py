@@ -11,33 +11,13 @@ def calculate_tpm(df):
     
     # Debug: Print the data array
     print("Data array:\n", data)
+    transition_counts= data.copy()
     
-    # Extract the number of states
-    num_states = len(market_names)
-    
-    # Initialize the transition count matrix
-    transition_counts = np.zeros((num_states, num_states))
-    
-    # Calculate transition counts
-    for i in range(len(data) - 1):
-        current_state = np.argmax(data[i, :])  # Find index of max value in current row
-        next_state = np.argmax(data[i + 1, :])  # Find index of max value in next row
-        
-        # Debug: Print current and next states
-        print(f"Row {i}: current_state={current_state}, next_state={next_state}")
-        
-        if current_state < num_states and next_state < num_states:  # Ensure valid indices
-            transition_counts[current_state, next_state] += 1
-
     # Debug: Print the transition counts matrix
     print("Transition counts:\n", transition_counts)
     
-    # Normalize to create the TPM
-    row_sums = transition_counts.sum(axis=1, keepdims=True)
-    row_sums[row_sums == 0] = 1  # Avoid division by zero
-    tpm = transition_counts / row_sums
-    
-    return tpm, market_names
+    tpm = transition_counts / transition_counts.sum(axis=1, keepdims=True)
+    return tpm
 
 def main():
     st.title("Transition Probability Matrix Calculator")
