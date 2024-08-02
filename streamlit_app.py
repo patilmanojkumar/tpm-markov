@@ -9,6 +9,9 @@ def calculate_tpm(df):
     # Convert DataFrame to NumPy array (excluding the first and last columns)
     data = df[market_names].to_numpy()
     
+    # Print data to debug
+    print("Data array:\n", data)
+    
     # Extract the number of states
     num_states = len(market_names)
     
@@ -22,6 +25,9 @@ def calculate_tpm(df):
         if current_state < num_states and next_state < num_states:  # Ensure valid indices
             transition_counts[current_state, next_state] += 1
 
+    # Print transition counts to debug
+    print("Transition counts:\n", transition_counts)
+    
     # Normalize to create the TPM
     row_sums = transition_counts.sum(axis=1, keepdims=True)
     row_sums[row_sums == 0] = 1  # Avoid division by zero
@@ -54,6 +60,9 @@ def main():
 
         # Calculate TPM
         tpm, market_names = calculate_tpm(df)
+        
+        # Print TPM to debug
+        print("Transition Probability Matrix:\n", tpm)
         
         # Convert TPM to DataFrame for display and download
         tpm_df = pd.DataFrame(tpm, columns=market_names, index=market_names)
