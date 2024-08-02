@@ -3,11 +3,11 @@ import pandas as pd
 import numpy as np
 
 def calculate_tpm(df):
-    # Extract market names (excluding the first column which is year)
-    market_names = df.columns[1:]
+    # Extract market names (excluding the first column which is year and the last column which is total exports)
+    market_names = df.columns[1:-1]
     
-    # Convert DataFrame to NumPy array
-    data = df.to_numpy()
+    # Convert DataFrame to NumPy array (excluding the first and last columns)
+    data = df[market_names].to_numpy()
     
     # Extract the number of states
     num_states = len(market_names)
@@ -17,12 +17,15 @@ def calculate_tpm(df):
     
     # Calculate transition counts
     for i in range(len(data) - 1):
-        current_state = np.argmax(data[i, 1:])  # Exclude the first column (year)
-        next_state = np.argmax(data[i + 1, 1:])
-        transition_counts[current_state, next_state] += 1
+        current_state = np.argmax(data[i, :])  # Find index of max value in current row
+        next_state = np.argmax(data[i + 1, :])  # Find index of max value in next row
+        if current_state < num_states and next_state < num_states:  # Ensure valid indices
+            transition_counts[current_state, next_state] += 1
 
     # Normalize to create the TPM
-    tpm = transition_counts / transition_counts.sum(axis=1, keepdims=True)
+    row_sums = transition_counts.sum(axis=1, keepdims=True)
+    row_sums[row_sums == 0] = 1  # Avoid division by zero
+    tpm = transition_counts / row_sums
     
     return tpm, market_names
 
@@ -39,6 +42,15 @@ def main():
 
         st.write("Data Preview:")
         st.write(df.head())
+
+        if df.empty:
+            st.error("The uploaded file is empty. Please upload a valid file.")
+            return
+
+        # Ensure that the DataFrame has more than one row
+        if len(df) < 2:
+            st.error("The uploaded file does not have enough data for transition calculation.")
+            return
 
         # Calculate TPM
         tpm, market_names = calculate_tpm(df)
