@@ -10,14 +10,14 @@ def calculate_tpm(df):
     data = df[market_names].to_numpy()
     
     # Debug: Print the data array
-    print("Data array:\n", data)
-    transition_counts= data.copy()
+    st.write("Data array:\n", data)
+    transition_counts = data.copy()
     
     # Debug: Print the transition counts matrix
-    print("Transition counts:\n", transition_counts)
+    st.write("Transition counts:\n", transition_counts)
     
     tpm = transition_counts / transition_counts.sum(axis=1, keepdims=True)
-    return tpm,market_names
+    return tpm, market_names
 
 def main():
     st.title("Transition Probability Matrix Calculator")
@@ -43,8 +43,20 @@ def main():
             return
 
         # Calculate TPM
-        tpm,market_names = calculate_tpm(df)
-        print(tpm)
+        tpm, market_names = calculate_tpm(df)
+
+        st.write("Transition Probability Matrix:")
+        tpm_df = pd.DataFrame(tpm, columns=market_names, index=market_names)
+        st.write(tpm_df)
+
+        # Option to download the TPM
+        csv = tpm_df.to_csv(index=True)
+        st.download_button(
+            label="Download TPM as CSV",
+            data=csv,
+            file_name='tpm.csv',
+            mime='text/csv',
+        )
 
 if __name__ == "__main__":
     main()
