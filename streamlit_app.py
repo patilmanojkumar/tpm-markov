@@ -17,7 +17,7 @@ def calculate_tpm(df):
     print("Transition counts:\n", transition_counts)
     
     tpm = transition_counts / transition_counts.sum(axis=1, keepdims=True)
-    return tpm
+    return tpm,market_names
 
 def main():
     st.title("Transition Probability Matrix Calculator")
@@ -43,7 +43,7 @@ def main():
             return
 
         # Calculate TPM
-        tpm = calculate_tpm(df)
+        tpm,market_names = calculate_tpm(df)
         
         # Debug: Print TPM
         print("Transition Probability Matrix:\n", tpm)
